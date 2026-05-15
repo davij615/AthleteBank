@@ -383,6 +383,87 @@
             <div class="axis-card reveal" style="--delay: 225ms;"><span class="axis-year">P4</span><span class="axis-label">Athlete Bank Fund</span><span class="axis-sub">Customers become LPs in pre-IPO, private markets, sports deals.</span></div>
           </div>
         </div>
+
+        <!-- ============================================================
+             5-YEAR GROWTH CALCULATOR
+             Sits under Axis 2. Compounding cohort math.
+             ============================================================ -->
+        <div class="gcalc reveal" id="growth-calc">
+          <div class="gcalc-head">
+            <p class="eyebrow yellow gcalc-eyebrow">THE GROWTH CALCULATOR</p>
+            <h3 class="gcalc-title">Watch the cohort compound.</h3>
+            <p class="gcalc-lead">Each year a new ICP unlocks. Athletes in Y1, coaches in Y2, retired pros and officials in Y3, sports ESAs in Y4, and the full public in Y5. The customer doesn't churn. The revenue compounds. Drag the sliders.</p>
+          </div>
+
+          <div class="gcalc-presets">
+            <button class="gpreset-btn" data-gpreset="conservative">Conservative</button>
+            <button class="gpreset-btn active" data-gpreset="base">Base case</button>
+            <button class="gpreset-btn" data-gpreset="bull">Bull case</button>
+            <button class="gpreset-btn" data-gpreset="moon">Moonshot</button>
+          </div>
+
+          <div class="gcalc-grid">
+            <div class="gcalc-controls">
+              <div class="gcalc-row">
+                <div class="gcalc-row-head">
+                  <label for="gpen-input">Cohort penetration</label>
+                  <span class="gcalc-val" id="gpen-val">3%</span>
+                </div>
+                <input type="range" id="gpen-input" min="1" max="25" step="1" value="3" />
+                <div class="gcalc-row-sub">Share of each cohort that opens an account by Year 5.</div>
+              </div>
+
+              <div class="gcalc-row">
+                <div class="gcalc-row-head">
+                  <label for="garpu-input">Blended ARPU</label>
+                  <span class="gcalc-val" id="garpu-val">$240</span>
+                </div>
+                <input type="range" id="garpu-input" min="60" max="800" step="20" value="240" />
+                <div class="gcalc-row-sub">Annual net revenue per active customer · interchange + AUM + lending + tax.</div>
+              </div>
+
+              <div class="gcalc-row">
+                <div class="gcalc-row-head">
+                  <label for="gattach-input">Product attach rate</label>
+                  <span class="gcalc-val" id="gattach-val">1.4x</span>
+                </div>
+                <input type="range" id="gattach-input" min="100" max="300" step="10" value="140" />
+                <div class="gcalc-row-sub">Multiplier on ARPU as customers age into wealth, lending, and tax products.</div>
+              </div>
+            </div>
+
+            <div class="gcalc-chart-wrap">
+              <div class="gcalc-chart-head">
+                <div class="gcalc-chart-label">ANNUAL REVENUE · 5-YEAR ARC</div>
+                <div class="gcalc-chart-legend">
+                  <span class="gcalc-leg-dot gcalc-leg-old"></span> existing cohort
+                  <span class="gcalc-leg-dot gcalc-leg-new"></span> new cohort
+                </div>
+              </div>
+              <div class="gcalc-chart" id="gcalc-chart"></div>
+            </div>
+          </div>
+
+          <div class="gcalc-totals">
+            <div class="gcalc-total">
+              <div class="gcalc-total-label">Y5 ANNUAL REVENUE</div>
+              <div class="gcalc-total-value" id="gy5-rev">$0</div>
+              <div class="gcalc-total-sub">Run-rate at end of arc</div>
+            </div>
+            <div class="gcalc-total gcalc-total-accent">
+              <div class="gcalc-total-label">CUMULATIVE 5-YR REVENUE</div>
+              <div class="gcalc-total-value" id="gcum-rev">$0</div>
+              <div class="gcalc-total-sub">Total recognized · Y1 through Y5</div>
+            </div>
+            <div class="gcalc-total">
+              <div class="gcalc-total-label">CUSTOMERS BY Y5</div>
+              <div class="gcalc-total-value" id="gusers-total">0</div>
+              <div class="gcalc-total-sub">Active accounts across all cohorts</div>
+            </div>
+          </div>
+
+          <p class="gcalc-footnote">Cohort sizes: 190K D1 + 310K all-NCAA athletes (Y1), 100K coaches (Y2), 80K retired pros/officials/trainers (Y3), 8K sports ESA families (Y4), accredited and public layer phased in Y5. Penetration applied with a ramp curve. ARPU scaled by attach as customers age into the stack. Athlete cohort never churns out, it ages up — once an athlete, always an athlete.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -919,6 +1000,7 @@
   </a>
 
   <script src="calculator.js"></script>
+  <script src="growth-calc.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

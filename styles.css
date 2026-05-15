@@ -3111,3 +3111,442 @@ body {
 .orgv2-pillar-white { background: #f0f0ed; color: var(--black); }
 .orgv2-pillar-green-light { background: var(--green-light); color: var(--text); }
 
+
+/* ============================================================
+   5-YEAR GROWTH CALCULATOR (lives under Axis 2)
+   ============================================================ */
+.gcalc {
+  margin-top: 56px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gcalc::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle at top right, rgba(212, 255, 0, 0.06), transparent 65%);
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .gcalc { padding: 28px 24px; }
+}
+
+.gcalc-head {
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.gcalc-eyebrow {
+  margin-bottom: 14px;
+}
+
+.gcalc-title {
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.gcalc-lead {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 680px;
+}
+
+.gcalc-presets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.gpreset-btn {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.gpreset-btn:hover { border-color: var(--text); color: var(--text); }
+
+.gpreset-btn.active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--black);
+  font-weight: 700;
+}
+
+/* Grid: controls on left, chart on right */
+.gcalc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 880px) {
+  .gcalc-grid { grid-template-columns: 1fr; gap: 28px; }
+}
+
+.gcalc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.gcalc-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gcalc-row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.gcalc-row label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.005em;
+}
+
+.gcalc-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--yellow);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+
+.gcalc-row input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: 2px;
+  outline: none;
+  width: 100%;
+  margin: 4px 0 2px;
+}
+
+.gcalc-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--yellow);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--black);
+  transition: transform 0.15s ease;
+}
+
+.gcalc-row input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+.gcalc-row input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--yellow);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--black);
+}
+
+.gcalc-row-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* Chart */
+.gcalc-chart-wrap {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 20px 16px;
+  min-height: 320px;
+}
+
+.gcalc-chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gcalc-chart-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.gcalc-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gcalc-leg-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  margin-right: 5px;
+  vertical-align: -1px;
+}
+
+.gcalc-leg-old { background: #4a5a1a; }
+.gcalc-leg-new { background: var(--yellow); }
+
+.gcalc-chart {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  align-items: end;
+  min-height: 240px;
+  padding-bottom: 4px;
+}
+
+.gbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  gap: 0;
+}
+
+.gbar-year {
+  order: 5;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+.gbar-final .gbar-year { color: var(--yellow); }
+
+.gbar-track {
+  order: 3;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 80px;
+  margin-bottom: 8px;
+}
+
+.gbar-fill {
+  width: 100%;
+  max-width: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 4px;
+  box-shadow: 0 0 0 1px rgba(212, 255, 0, 0.08);
+}
+
+.gbar-segment {
+  width: 100%;
+  transition: flex 0.4s ease;
+  min-height: 2px;
+}
+
+.gbar-old {
+  background: linear-gradient(180deg, #6a7a2a 0%, #4a5a1a 100%);
+}
+
+.gbar-new {
+  background: linear-gradient(180deg, var(--yellow) 0%, #b8e000 100%);
+}
+
+.gbar-final .gbar-fill {
+  box-shadow: 0 0 0 1px rgba(212, 255, 0, 0.3), 0 0 20px rgba(212, 255, 0, 0.15);
+}
+
+.gbar-value {
+  order: 2;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.gbar-final .gbar-value { color: var(--yellow); }
+
+.gbar-users {
+  order: 6;
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+/* Totals row */
+.gcalc-totals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 700px) {
+  .gcalc-totals { grid-template-columns: 1fr; }
+}
+
+.gcalc-total {
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.gcalc-total:hover { border-color: var(--border-strong); }
+
+.gcalc-total-accent {
+  background: var(--yellow);
+  color: var(--green);
+  border-color: var(--yellow);
+}
+
+.gcalc-total-accent:hover { border-color: var(--yellow); }
+
+.gcalc-total-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.gcalc-total-accent .gcalc-total-label {
+  color: var(--green);
+  opacity: 0.7;
+}
+
+.gcalc-total-value {
+  font-size: clamp(28px, 3.2vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--yellow);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.gcalc-total-accent .gcalc-total-value {
+  color: var(--green);
+}
+
+.gcalc-total-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.gcalc-total-accent .gcalc-total-sub {
+  color: var(--green);
+  opacity: 0.75;
+}
+
+.gcalc-footnote {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================================
+   SPACING / TYPOGRAPHY AUDIT — tighten the Market section
+   ============================================================ */
+
+/* Reduce the wedge of empty space between section-lead and the 500K hero.
+   Default section-lead margin-bottom: 64px. In the Market section the
+   following .market-hero already has padding 80px top + border, so the
+   visual gap is too big. Tighten via a scoped override. */
+#market .section-lead {
+  margin-bottom: 40px;
+}
+
+.market-hero {
+  padding: 64px 0 56px;
+  margin-bottom: 64px;
+}
+
+.market-caption {
+  margin-top: 20px;
+}
+
+.market-segments {
+  margin-top: 12px;
+  line-height: 1.6;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Axes section heading sits between the section title and the cards.
+   Promote it to a clearer mid-tier heading. */
+.market-axes h3 {
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 800;
+  margin-bottom: 28px;
+  letter-spacing: -0.018em;
+  line-height: 1.15;
+}
+
+/* AXIS h4 — tighten label-to-grid spacing for rhythm */
+.axis {
+  margin-bottom: 48px;
+}
+.axis:last-of-type { margin-bottom: 0; }
+.axis h4 {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  margin-bottom: 16px;
+}

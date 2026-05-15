@@ -34,19 +34,61 @@
   const floating = document.getElementById('floating-cta');
   if (floating) {
     const calculator = document.getElementById('calculator');
+    const growthCalc = document.getElementById('growth-calc');
+    const btn = document.getElementById('floating-cta-btn');
+    const menu = document.getElementById('floating-menu');
+
+    function inViewport(el, marginTop) {
+      if (!el) return false;
+      const rect = el.getBoundingClientRect();
+      return rect.top < window.innerHeight * marginTop && rect.bottom > 0;
+    }
+
+    function closeMenu() {
+      if (!btn || !menu) return;
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+    }
+
     function onFloatScroll() {
       const heroBottom = window.innerHeight * 0.8;
       const beyondHero = window.scrollY > heroBottom;
-      const beforeCalc = !calculator || calculator.getBoundingClientRect().top > window.innerHeight * 0.3;
+      // Hide once either calculator is meaningfully in view
+      const calcInView = inViewport(calculator, 0.5) || inViewport(growthCalc, 0.5);
       const inFooterZone = window.scrollY + window.innerHeight > document.body.scrollHeight - 400;
-      if (beyondHero && beforeCalc && !inFooterZone) {
+      if (beyondHero && !calcInView && !inFooterZone) {
         floating.classList.add('visible');
       } else {
         floating.classList.remove('visible');
+        closeMenu();
       }
     }
     window.addEventListener('scroll', onFloatScroll, { passive: true });
     onFloatScroll();
+
+    if (btn && menu) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const open = btn.classList.toggle('open');
+        menu.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+      });
+      // Close on menu-item click
+      menu.querySelectorAll('.floating-menu-item').forEach(function (a) {
+        a.addEventListener('click', closeMenu);
+      });
+      // Close on outside click
+      document.addEventListener('click', function (e) {
+        if (!floating.contains(e.target)) closeMenu();
+      });
+      // Close on Esc
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+    }
   }
 
   if ('IntersectionObserver' in window) {

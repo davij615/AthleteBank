@@ -18,8 +18,268 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ========================================================
+       PASSWORD GATE — inline so it paints before anything else
+       Note: this is a client-side gate. For real confidentiality,
+       enable Vercel's native Password Protection (see README).
+       ======================================================== */
+    html.gate-locked, html.gate-locked body { overflow: hidden; height: 100%; }
+    body.gate-locked > *:not(#gate) { display: none !important; }
+    body.gate-locked { background: #000; }
+
+    #gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #fff;
+    }
+    body.gate-locked #gate { display: flex; }
+
+    #gate::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 800px;
+      height: 800px;
+      max-width: 120vw;
+      max-height: 120vh;
+      background: radial-gradient(circle, rgba(212, 255, 0, 0.06), transparent 60%);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .gate-card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      background: #161616;
+      border: 1px solid #262626;
+      border-radius: 20px;
+      padding: 40px 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .gate-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .gate-mark svg { width: 22px; height: 22px; color: #d4ff00; }
+    .gate-mark-text {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #fff;
+    }
+
+    .gate-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: #d4ff00;
+      text-transform: uppercase;
+    }
+
+    .gate-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    .gate-sub {
+      font-size: 14px;
+      color: #a8a8a8;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .gate-input-wrap {
+      position: relative;
+    }
+
+    .gate-input {
+      width: 100%;
+      background: #0a0a0a;
+      border: 1px solid #3a3a3a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      outline: none;
+      letter-spacing: 0.02em;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .gate-input::placeholder { color: #6b6b6b; font-weight: 400; }
+    .gate-input:focus {
+      border-color: #d4ff00;
+      box-shadow: 0 0 0 3px rgba(212, 255, 0, 0.12);
+    }
+    .gate-input.error {
+      border-color: #ff5555;
+      animation: gateShake 0.35s ease;
+    }
+    @keyframes gateShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .gate-submit {
+      background: #d4ff00;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .gate-submit:hover { background: #e0ff4a; }
+    .gate-submit:active { transform: scale(0.98); }
+
+    .gate-error {
+      font-size: 12px;
+      color: #ff7a7a;
+      min-height: 16px;
+      font-weight: 500;
+    }
+
+    .gate-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 16px;
+      margin-top: 4px;
+      border-top: 1px solid #262626;
+      font-size: 11px;
+      color: #6b6b6b;
+      letter-spacing: 0.02em;
+    }
+    .gate-footer a { color: #a8a8a8; text-decoration: none; }
+    .gate-footer a:hover { color: #d4ff00; }
+  </style>
 </head>
 <body>
+  <script>
+    // Pre-paint gate check. Runs before anything else renders.
+    (function () {
+      var KEY = 'ab_gate_v1';
+      var ok = false;
+      try { ok = window.sessionStorage.getItem(KEY) === 'ok'; } catch (e) {}
+      if (!ok) {
+        document.documentElement.classList.add('gate-locked');
+        document.body.classList.add('gate-locked');
+      }
+    })();
+  </script>
+
+  <div id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div class="gate-card">
+      <div class="gate-mark">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 4 L28 28 L22 28 L19 22 L13 22 L10 28 L4 28 Z M14.5 18 L17.5 18 L16 14 Z" fill="currentColor"/>
+        </svg>
+        <span class="gate-mark-text">Athlete Bank</span>
+      </div>
+      <div>
+        <p class="gate-eyebrow">CONFIDENTIAL · PEAK6 TRIALS</p>
+        <h1 class="gate-title" id="gate-title">This deck is private.</h1>
+      </div>
+      <p class="gate-sub">Enter the password shared with you to continue. If you don't have one, reach out to Jesse at <a href="mailto:davij615@gmail.com" style="color:#d4ff00;text-decoration:none;">davij615@gmail.com</a>.</p>
+      <form class="gate-form" id="gate-form" autocomplete="off">
+        <div class="gate-input-wrap">
+          <input type="password" id="gate-input" class="gate-input" placeholder="Password" autocomplete="off" autofocus required />
+        </div>
+        <div class="gate-error" id="gate-error" aria-live="polite"></div>
+        <button type="submit" class="gate-submit">
+          Unlock <span aria-hidden="true">→</span>
+        </button>
+      </form>
+      <div class="gate-footer">
+        <span>© 2026 Athlete Bank</span>
+        <a href="mailto:davij615@gmail.com">Need access?</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Gate logic. SHA-256(password) compared at runtime.
+    // Default password: peak6  →  hash below.
+    // To change: hash a new password with `echo -n "newpw" | sha256sum`
+    // and replace GATE_HASH.
+    (function () {
+      var GATE_HASH = 'da3282d2d0ffe3f0caf02da316e4b9a771b3bf5458151f6130af545f72e0e9a3';
+      var KEY = 'ab_gate_v1';
+      var form = document.getElementById('gate-form');
+      var input = document.getElementById('gate-input');
+      var error = document.getElementById('gate-error');
+      if (!form || !input) return;
+
+      async function sha256(str) {
+        var buf = new TextEncoder().encode(str);
+        var hash = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hash))
+          .map(b => b.toString(16).padStart(2, '0'))
+          .join('');
+      }
+
+      function unlock() {
+        try { sessionStorage.setItem(KEY, 'ok'); } catch (e) {}
+        document.documentElement.classList.remove('gate-locked');
+        document.body.classList.remove('gate-locked');
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        error.textContent = '';
+        input.classList.remove('error');
+        var val = (input.value || '').trim();
+        if (!val) return;
+        try {
+          var hash = await sha256(val);
+          if (hash === GATE_HASH) {
+            unlock();
+          } else {
+            input.classList.add('error');
+            error.textContent = 'Incorrect password. Try again.';
+            input.value = '';
+            input.focus();
+          }
+        } catch (err) {
+          error.textContent = 'Something went wrong. Refresh and try again.';
+        }
+      });
+    })();
+  </script>
 
   <header class="nav" id="nav">
     <div class="nav-inner">
@@ -37,7 +297,7 @@
         <a href="#why-now">Why now</a>
         <a href="#compliance">Compliance</a>
         <a href="#ask">Ask</a>
-        <a href="#contact" class="nav-cta">Schedule a call</a>
+        <a href="mailto:davij615@gmail.com?subject=Athlete%20Bank%20%C2%B7%20Peak6%20Trials" class="nav-cta">Reach out to Jesse</a>
       </nav>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -56,7 +316,8 @@
       <p class="hero-sub reveal">Athlete Bank is the first vertically integrated platform built for athletes: banking, fiduciary wealth, and the micro-NIL marketplace that lets every fan tip their favorite player.</p>
       <div class="hero-cta reveal">
         <a href="#problem" class="btn btn-primary">See the pitch <span aria-hidden="true">→</span></a>
-        <a href="#calculator" class="btn btn-ghost">Run the numbers</a>
+        <a href="#growth-calc" class="btn btn-ghost">Growth calculator</a>
+        <a href="#calculator" class="btn btn-ghost">Micro-donation calculator</a>
       </div>
       <div class="hero-strip reveal">
         <div class="strip-item"><span class="strip-num">$2.75B</span><span class="strip-label">NIL market</span></div>
@@ -975,10 +1236,10 @@
     <div class="container container-center">
       <p class="eyebrow yellow reveal">THE NEXT STEP</p>
       <h2 class="hero-title final-title reveal">Let's build it.</h2>
-      <p class="section-lead reveal">Thirty minutes. Walk through the deck, the GMV math, the 18-month roadmap.</p>
+      <p class="section-lead reveal">Drop me a line. Walk through the deck, the GMV math, the 18-month roadmap. Thirty minutes, whenever works.</p>
       <div class="hero-cta reveal" style="justify-content: center;">
-        <a href="https://cal.com/athletebank/peak6" class="btn btn-primary btn-large">Schedule a call <span aria-hidden="true">→</span></a>
-        <a href="mailto:founder@athletebank.com" class="btn btn-ghost btn-large">Email the founder</a>
+        <a href="mailto:davij615@gmail.com?subject=Athlete%20Bank%20%C2%B7%20Peak6%20Trials" class="btn btn-primary btn-large">Reach out to Jesse <span aria-hidden="true">→</span></a>
+        <a href="mailto:davij615@gmail.com" class="btn btn-ghost btn-large">davij615@gmail.com</a>
       </div>
       <p class="final-domains reveal">
         <span>www.AthleteBank.com</span>
@@ -994,10 +1255,32 @@
     </div>
   </footer>
 
-  <a href="#calculator" class="floating-cta" id="floating-cta">
-    <span>Run the GMV</span>
-    <span aria-hidden="true">→</span>
-  </a>
+  <div class="floating-cta-wrap" id="floating-cta">
+    <div class="floating-menu" id="floating-menu" aria-hidden="true">
+      <a href="#growth-calc" class="floating-menu-item" data-target="growth-calc">
+        <span class="floating-menu-num">01</span>
+        <span class="floating-menu-body">
+          <span class="floating-menu-name">Growth calculator</span>
+          <span class="floating-menu-sub">5-year cohort revenue</span>
+        </span>
+        <span class="floating-menu-arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="#calculator" class="floating-menu-item" data-target="calculator">
+        <span class="floating-menu-num">02</span>
+        <span class="floating-menu-body">
+          <span class="floating-menu-name">Micro-donation calculator</span>
+          <span class="floating-menu-sub">NIL clearing house GMV</span>
+        </span>
+        <span class="floating-menu-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+    <button type="button" class="floating-cta" id="floating-cta-btn" aria-expanded="false" aria-controls="floating-menu">
+      <span class="floating-cta-label">Run the numbers</span>
+      <span class="floating-cta-icon" aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 5 L8 10 L13 5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+  </div>
 
   <script src="calculator.js"></script>
   <script src="growth-calc.js"></script>

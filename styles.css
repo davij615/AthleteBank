@@ -3765,3 +3765,650 @@ body {
   letter-spacing: 0.18em;
   margin-bottom: 16px;
 }
+
+/* ============================================================
+   NIL PAYMENT RAILS · the wedge section
+   ============================================================ */
+.rails {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 3-card horizontal flow with arrow connectors */
+.rails-flow {
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr 56px 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+@media (max-width: 980px) {
+  .rails-flow {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .rails-arrow { height: 40px; width: 100%; transform: rotate(90deg); }
+}
+
+.rails-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 240px;
+  transition: border-color 0.2s ease, transform 0.3s ease;
+}
+
+.rails-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-3px);
+}
+
+.rails-card-tag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--yellow);
+  background: rgba(212, 255, 0, 0.08);
+  border: 1px solid rgba(212, 255, 0, 0.25);
+  padding: 4px 10px;
+  border-radius: 999px;
+  width: fit-content;
+  line-height: 1;
+}
+
+.rails-card-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.rails-card-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.rails-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.rails-card-list li {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 600;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.rails-card-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+.rails-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yellow);
+}
+
+.rails-arrow svg { width: 28px; height: 14px; }
+
+/* The category-position callout (yellow-glow panel) */
+.rails-category {
+  background: rgba(212, 255, 0, 0.05);
+  border: 1px solid rgba(212, 255, 0, 0.3);
+  border-radius: 16px;
+  padding: 24px 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rails-category::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(212, 255, 0, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+.rails-category-tag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.rails-category-body {
+  font-size: clamp(16px, 1.5vw, 19px);
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  margin: 0;
+  position: relative;
+}
+
+.rails-emphasis {
+  color: var(--yellow);
+  font-weight: 800;
+}
+
+/* Wedge thesis strip */
+.rails-wedge {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rails-wedge-head h3 {
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.018em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.rails-wedge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 880px) {
+  .rails-wedge-grid { grid-template-columns: 1fr; }
+}
+
+.rails-wedge-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rails-wedge-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--yellow);
+  background: rgba(212, 255, 0, 0.08);
+  border: 1px solid rgba(212, 255, 0, 0.25);
+  padding: 3px 9px;
+  border-radius: 999px;
+  width: fit-content;
+  line-height: 1;
+}
+
+.rails-wedge-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.rails-wedge-body {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Distribution stats strip — reuse of the old ff-distribution */
+.rails-stats {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  gap: 32px;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 28px;
+}
+
+@media (max-width: 880px) {
+  .rails-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .rails-stats-text { grid-column: 1 / -1; }
+}
+
+.rails-stats-num {
+  font-size: clamp(32px, 3.5vw, 44px);
+  font-weight: 800;
+  color: var(--yellow);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rails-stats-num span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.rails-stats-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.rails-stats-caveat {
+  display: block;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ============================================================
+   THE MOAT · the athlete-owned bank
+   ============================================================ */
+.moat {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.moat-fly {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.moat-fly::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(212, 255, 0, 0.05), transparent 65%);
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .moat-fly { padding: 28px 24px; }
+}
+
+.moat-fly-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 32px;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.moat-fly-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.moat-fly-caption {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.moat-fly-grid {
+  display: grid;
+  grid-template-columns: 1fr 64px 1fr 64px 1fr;
+  gap: 0;
+  align-items: stretch;
+  position: relative;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 980px) {
+  .moat-fly-grid { grid-template-columns: 1fr; gap: 16px; }
+  .moat-fly-arrow { height: 48px; width: 100%; transform: rotate(90deg); }
+}
+
+.moat-fly-node {
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 220px;
+  position: relative;
+  transition: border-color 0.2s ease, transform 0.3s ease;
+}
+
+.moat-fly-node:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-3px);
+}
+
+.moat-fly-node-accent {
+  background: var(--yellow);
+  color: var(--green);
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 1px rgba(212, 255, 0, 0.3), 0 16px 40px -16px rgba(212, 255, 0, 0.3);
+}
+
+.moat-fly-num {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  width: fit-content;
+  line-height: 1;
+  background: rgba(212, 255, 0, 0.08);
+  border: 1px solid rgba(212, 255, 0, 0.25);
+  color: var(--yellow);
+}
+
+.moat-fly-node-accent .moat-fly-num {
+  background: rgba(10, 61, 46, 0.12);
+  border-color: rgba(10, 61, 46, 0.3);
+  color: var(--green);
+}
+
+.moat-fly-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.moat-fly-node-accent .moat-fly-title { color: var(--green); }
+
+.moat-fly-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+
+.moat-fly-node-accent .moat-fly-body { color: var(--green); opacity: 0.85; }
+
+.moat-fly-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: auto;
+}
+
+.moat-fly-chips span {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+  background: rgba(212, 255, 0, 0.08);
+  color: var(--yellow);
+}
+
+.moat-fly-node-accent .moat-fly-chips span {
+  background: rgba(10, 61, 46, 0.12);
+  color: var(--green);
+}
+
+.moat-fly-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yellow);
+}
+
+.moat-fly-arrow svg { width: 32px; height: 16px; }
+
+.moat-fly-loop {
+  position: relative;
+  text-align: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.moat-fly-loop-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--yellow);
+  text-transform: uppercase;
+  padding: 8px 14px;
+  background: rgba(212, 255, 0, 0.06);
+  border: 1px solid rgba(212, 255, 0, 0.25);
+  border-radius: 999px;
+}
+
+.moat-fly-loop-icon { width: 14px; height: 14px; display: inline-flex; }
+
+.moat-fly-footer {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+/* Round tiers */
+.moat-tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 880px) { .moat-tiers { grid-template-columns: 1fr; } }
+
+.moat-tier {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.moat-tier-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.moat-tier-round {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--yellow);
+  text-transform: uppercase;
+}
+
+.moat-tier-when {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+
+.moat-tier-big {
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.moat-tier-big .yellow { color: var(--yellow); }
+
+.moat-tier-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+}
+
+.moat-tier-types {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* Comparison strip */
+.moat-vs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 880px) { .moat-vs { grid-template-columns: 1fr; } }
+
+.moat-vs-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 240px;
+}
+
+.moat-vs-card-accent {
+  background: var(--yellow);
+  color: var(--green);
+  border-color: var(--yellow);
+  box-shadow: 0 20px 50px -20px rgba(212, 255, 0, 0.25);
+}
+
+.moat-vs-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.moat-vs-card-accent .moat-vs-tag { color: var(--green); opacity: 0.7; }
+
+.moat-vs-name {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  color: var(--text);
+}
+
+.moat-vs-card-accent .moat-vs-name { color: var(--green); }
+
+.moat-vs-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moat-vs-list li {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  padding-left: 16px;
+  position: relative;
+}
+
+.moat-vs-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.moat-vs-card-accent .moat-vs-list li { color: var(--green); opacity: 0.88; }
+.moat-vs-card-accent .moat-vs-list li::before { color: var(--green); opacity: 0.6; }
+
+.moat-vs-stat {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+.moat-vs-card-accent .moat-vs-stat {
+  border-top-color: rgba(10, 61, 46, 0.25);
+  color: var(--green);
+}
+
+.moat-quote {
+  text-align: center;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  color: var(--text);
+  max-width: 920px;
+  margin: 8px auto 0;
+}
+
+.moat-quote .yellow { color: var(--yellow); }
